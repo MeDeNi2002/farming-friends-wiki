@@ -140,7 +140,7 @@
   </a>
 
   <h1>FAF Marketplace & Values Wiki</h1>
-  <p>Farming & Friends — Items, Values and Information</p>
+  <p>Farming & Friends Items and Information</p>
 </header>
 
 <main>
@@ -306,7 +306,10 @@
       if (!error) isAdmin = data === true;
     }
 
+    // Login se prikazuje samo na admin linku, ako korisnik nije prijavljen.
     el("loginPanel").classList.toggle("hidden", !adminMode || isAdmin);
+
+    // Admin panel se prikazuje samo prijavljenim administratorima.
     el("adminPanel").classList.toggle("hidden", !isAdmin);
 
     renderItems();
