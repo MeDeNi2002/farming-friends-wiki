@@ -100,9 +100,7 @@
       color: #10200e;
     }
 
-    .search-box {
-      margin-bottom: 16px;
-    }
+    .search-box { margin-bottom: 16px; }
 
     .search-box input {
       padding: 14px;
@@ -192,8 +190,6 @@
       color: #81917e;
     }
 
-    /* Item detail popup */
-
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -264,9 +260,7 @@
       background: #111810;
     }
 
-    .modal-content {
-      padding: 18px;
-    }
+    .modal-content { padding: 18px; }
 
     .modal-content .description {
       line-height: 1.6;
@@ -285,7 +279,6 @@
       }
 
       .modal-overlay { padding: 12px; }
-
       .modal-image { max-height: 55vh; }
     }
   </style>
@@ -330,6 +323,7 @@
       <option value="Cars">Cars</option>
       <option value="Tractors">Tractors</option>
       <option value="Trucks">Trucks</option>
+      <option value="Trailers">Trailers</option>
       <option value="Harvesters">Harvesters</option>
       <option value="Equipments">Equipments</option>
       <option value="Events">Events</option>
@@ -363,7 +357,6 @@
   </section>
 </main>
 
-<!-- Item popup -->
 <div id="itemModal" class="modal-overlay hidden" role="dialog"
      aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-card">
@@ -388,7 +381,7 @@
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const categories = [
-    "All", "Seeds", "Cars", "Tractors", "Trucks",
+    "All", "Seeds", "Cars", "Tractors", "Trucks", "Trailers",
     "Harvesters", "Equipments", "Events", "Developer Items"
   ];
 
@@ -558,7 +551,6 @@
   });
 
   async function checkAdmin() {
-    // Sakrij admin sekcije dok se proverava nalog.
     el("loginPanel").classList.add("hidden");
     el("adminPanel").classList.add("hidden");
     isAdmin = false;
