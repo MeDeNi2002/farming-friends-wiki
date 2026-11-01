@@ -96,7 +96,7 @@
     .admin-actions button { flex: 1; }
     .hidden { display: none !important; }
     .muted { color: #aab9a6; font-size: 13px; }
-    #message { margin: 10px 0; color: #b8e89b; }
+    #message, #loginMessage { margin: 10px 0; color: #b8e89b; }
     footer { text-align: center; padding: 25px; color: #81917e; }
   </style>
 </head>
@@ -108,18 +108,17 @@
 </header>
 
 <main>
-  <section class="panel" id="loginPanel">
+  <section class="panel hidden" id="loginPanel">
     <h2>Admin Login</h2>
     <input id="email" type="email" placeholder="Admin email">
     <input id="password" type="password" placeholder="Password">
     <button id="loginBtn">Login</button>
-    <p class="muted">Only authorized administrators can add, edit or delete items.</p>
     <div id="loginMessage"></div>
   </section>
 
   <section class="panel hidden" id="adminPanel">
     <h2>Admin Panel</h2>
-    <p id="adminStatus" class="muted">You are logged in as an admin.</p>
+    <p class="muted">You are logged in as an admin.</p>
 
     <h3 id="formTitle">Add New Item</h3>
     <input id="itemName" type="text" placeholder="Item name">
@@ -162,19 +161,14 @@
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const categories = [
-    "All",
-    "Seeds",
-    "Cars",
-    "Tractors",
-    "Trucks",
-    "Harvesters",
-    "Equipments",
-    "Events",
-    "Developer Items"
+    "All", "Seeds", "Cars", "Tractors", "Trucks",
+    "Harvesters", "Equipments", "Events", "Developer Items"
   ];
 
+  const adminMode =
+    new URLSearchParams(window.location.search).get("admin") === "true";
+
   let currentCategory = "All";
-  let currentUser = null;
   let isAdmin = false;
   let editingId = null;
   let items = [];
@@ -194,10 +188,6 @@
   function showMessage(message, isError = false) {
     el("message").textContent = message;
     el("message").style.color = isError ? "#ff9999" : "#b8e89b";
-  }
-
-  function showLoginMessage(message) {
-    el("loginMessage").textContent = message;
   }
 
   function renderFilters() {
@@ -273,7 +263,6 @@
 
   async function checkAdmin() {
     const { data: { user } } = await db.auth.getUser();
-    currentUser = user;
     isAdmin = false;
 
     if (user) {
@@ -281,7 +270,10 @@
       if (!error) isAdmin = data === true;
     }
 
-    el("loginPanel").classList.toggle("hidden", isAdmin);
+    // Login se prikazuje samo kada je otvoren admin link.
+    el("loginPanel").classList.toggle("hidden", !adminMode || isAdmin);
+
+    // Admin panel se prikazuje samo ovlašćenim administratorima.
     el("adminPanel").classList.toggle("hidden", !isAdmin);
 
     renderItems();
@@ -291,23 +283,23 @@
     const email = el("email").value.trim();
     const password = el("password").value;
 
-    showLoginMessage("Logging in...");
+    el("loginMessage").textContent = "Logging in...";
 
     const { error } = await db.auth.signInWithPassword({ email, password });
 
     if (error) {
-      showLoginMessage(error.message);
+      el("loginMessage").textContent = error.message;
       return;
     }
 
     await checkAdmin();
 
     if (!isAdmin) {
-      showLoginMessage("This account is not an authorized admin.");
+      el("loginMessage").textContent = "This account is not an authorized admin.";
       await db.auth.signOut();
       await checkAdmin();
     } else {
-      showLoginMessage("");
+      el("loginMessage").textContent = "";
       showMessage("Logged in successfully!");
     }
   }
@@ -316,7 +308,7 @@
     await db.auth.signOut();
     resetForm();
     await checkAdmin();
-    showLoginMessage("Logged out.");
+    el("loginMessage").textContent = "Logged out.";
   }
 
   function resetForm() {
@@ -388,20 +380,11 @@
         imageUrl = publicData.publicUrl;
       }
 
-      const itemData = {
-        name,
-        category,
-        description,
-        image_url: imageUrl
-      };
+      const itemData = { name, category, description, image_url: imageUrl };
 
-      let result;
-
-      if (editingId) {
-        result = await db.from("items").update(itemData).eq("id", editingId);
-      } else {
-        result = await db.from("items").insert(itemData);
-      }
+      const result = editingId
+        ? await db.from("items").update(itemData).eq("id", editingId)
+        : await db.from("items").insert(itemData);
 
       if (result.error) throw result.error;
 
