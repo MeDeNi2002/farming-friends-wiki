@@ -2,424 +2,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAF Marketplace & Values | Wiki</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0d1512;color:#f2f7f3;font-family:Arial,sans-serif}
-header{text-align:center;padding:48px 20px;background:linear-gradient(135deg,#173b28,#101a14);border-bottom:1px solid #345440}
-header small{color:#9debb1;letter-spacing:3px}
-h1{font-size:clamp(30px,6vw,52px);margin:16px 0}
-header p{color:#b4c7b8}
-main{max-width:1100px;margin:30px auto;padding:0 18px}
-input,textarea,select{width:100%;padding:13px;background:#18251e;border:1px solid #355342;border-radius:10px;color:white;font-size:15px}
-textarea{min-height:100px;resize:vertical}
-button{padding:11px 17px;border-radius:25px;border:1px solid #42644d;background:#192a20;color:white;cursor:pointer}
-button.active,button:hover{background:#34794a}
-button:disabled{opacity:.55;cursor:wait}
-nav{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 30px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
-.card{background:#18251e;border:1px solid #304c3a;border-radius:14px;overflow:hidden}
-.photo{height:160px;background:#223b2b;display:flex;align-items:center;justify-content:center;color:#a5b9a9;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:cover}
-.info{padding:16px}
-.category{color:#8fe5a6;font-size:11px;letter-spacing:2px;text-transform:uppercase}
-h2{margin-bottom:20px}
-h3{margin:9px 0}
-.description{color:#c0cec3;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
-footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233;margin-top:50px}
-.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:18px 0}
-.admin-box{background:#14231a;border:1px solid #355342;border-radius:14px;padding:18px;margin:22px 0}
-.admin-box h2{margin-top:0}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-grid .wide{grid-column:1/-1}
-.form-actions,.item-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.item-actions button{padding:8px 12px;font-size:13px}
-.status{color:#9debb1;font-size:14px;min-height:20px;margin-top:10px}
-.muted{color:#a8b9ad;font-size:13px}
-.hidden{display:none!important}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAF Marketplace & Values Wiki</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101810;
+      color: #edf5e9;
+    }
+    header {
+      background: #1b2b1d;
+      padding: 25px 18px;
+      text-align: center;
+      border-bottom: 2px solid #466b3d;
+    }
+    header h1 { margin: 0 0 8px; color: #a8dc83; }
+    header p { margin: 0; color: #c4d5bd; }
+    main { max-width: 1100px; margin: auto; padding: 20px; }
+    .panel {
+      background: #1b291d;
+      border: 1px solid #38543a;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+    h2 { color: #a8dc83; margin-top: 0; }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 11px;
+      margin: 6px 0;
+      border-radius: 7px;
+      border: 1px solid #496849;
+      background: #111b12;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button {
+      background: #477b3c;
+      border: 0;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #5b954c; }
+    button.secondary { background: #405344; }
+    button.danger { background: #963f3f; }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .filters button {
+      width: auto;
+      padding: 9px 13px;
+      margin: 0;
+    }
+    .filters button.active { background: #8bbf68; color: #10200e; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .item {
+      background: #1b291d;
+      border: 1px solid #38543a;
+      border-radius: 11px;
+      overflow: hidden;
+    }
+    .item img {
+      width: 100%;
+      height: 165px;
+      object-fit: cover;
+      background: #263528;
+    }
+    .item-content { padding: 13px; }
+    .item h3 { margin: 0 0 8px; color: #b6e393; }
+    .category {
+      display: inline-block;
+      background: #304a30;
+      color: #c8e9ad;
+      padding: 5px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .description { color: #d0d9cd; white-space: pre-wrap; }
+    .admin-actions { display: flex; gap: 7px; }
+    .admin-actions button { flex: 1; }
+    .hidden { display: none !important; }
+    .muted { color: #aab9a6; font-size: 13px; }
+    #message { margin: 10px 0; color: #b8e89b; }
+    footer { text-align: center; padding: 25px; color: #81917e; }
+  </style>
 </head>
-
 <body>
 
 <header>
-<small>FAF MARKETPLACE & VALUES PRESENTS</small>
-<h1>🌱 Farming & Friends Wiki</h1>
-<p>Your FaF Marketplace Community.</p>
+  <h1>FAF Marketplace & Values Wiki</h1>
+  <p>Farming & Friends — Items, Values and Information</p>
 </header>
 
 <main>
+  <section class="panel" id="loginPanel">
+    <h2>Admin Login</h2>
+    <input id="email" type="email" placeholder="Admin email">
+    <input id="password" type="password" placeholder="Password">
+    <button id="loginBtn">Login</button>
+    <p class="muted">Only authorized administrators can add, edit or delete items.</p>
+    <div id="loginMessage"></div>
+  </section>
 
-<div class="toolbar">
-<input id="search" placeholder="Search seeds, cars, tractors, trucks..." style="max-width:650px" oninput="render()">
-<button id="loginToggle" onclick="toggleLogin()">Admin login</button>
-</div>
+  <section class="panel hidden" id="adminPanel">
+    <h2>Admin Panel</h2>
+    <p id="adminStatus" class="muted">You are logged in as an admin.</p>
 
-<section id="loginPanel" class="admin-box hidden">
-<h2>Administrator login</h2>
-<div class="form-grid">
-<input id="email" type="email" placeholder="Admin email">
-<input id="password" type="password" placeholder="Password">
-</div>
-<div class="form-actions">
-<button id="loginButton" onclick="login()">Log in</button>
-<button onclick="closeLogin()">Cancel</button>
-</div>
-<div id="loginStatus" class="status"></div>
-</section>
+    <h3 id="formTitle">Add New Item</h3>
+    <input id="itemName" type="text" placeholder="Item name">
 
-<section id="adminPanel" class="admin-box hidden">
-<div class="toolbar">
-<div>
-<h2 style="margin:0">Admin panel</h2>
-<div class="muted" id="adminEmail"></div>
-</div>
-<button onclick="logout()">Log out</button>
-</div>
+    <select id="itemCategory">
+      <option value="Seeds">Seeds</option>
+      <option value="Cars">Cars</option>
+      <option value="Tractors">Tractors</option>
+      <option value="Trucks">Trucks</option>
+      <option value="Harvesters">Harvesters</option>
+      <option value="Equipments">Equipments</option>
+      <option value="Events">Events</option>
+      <option value="Developer Items">Developer Items</option>
+    </select>
 
-<h3 id="formTitle">Add new item</h3>
+    <textarea id="itemDescription" placeholder="Description, value, information..."></textarea>
+    <label for="itemImage" class="muted">Item image</label>
+    <input id="itemImage" type="file" accept="image/*">
 
-<form id="itemForm" onsubmit="saveItem(event)">
-<div class="form-grid">
+    <button id="saveBtn">Add Item</button>
+    <button id="cancelEditBtn" class="secondary hidden">Cancel Edit</button>
+    <button id="logoutBtn" class="danger">Logout</button>
+    <div id="message"></div>
+  </section>
 
-<input id="itemName" required maxlength="100" placeholder="Item name">
-
-<select id="itemCategory" required>
-<option value="Seeds">Seeds</option>
-<option value="Cars">Cars</option>
-<option value="Tractors">Tractors</option>
-<option value="Trucks">Trucks</option>
-<option value="Equipments">Equipments</option>
-<option value="Events">Events</option>
-</select>
-
-<textarea id="itemDescription" class="wide" placeholder="Description / Obtained by..."></textarea>
-
-<div class="wide">
-<label for="itemImage" class="muted">Item image (optional)</label>
-<input id="itemImage" type="file" accept="image/*">
-<div class="muted" id="imageHint">Choose an image to upload.</div>
-</div>
-
-</div>
-
-<div class="form-actions">
-<button id="saveButton" type="submit">Add item</button>
-<button type="button" onclick="resetForm()">Clear form</button>
-</div>
-<div id="adminStatus" class="status"></div>
-</form>
-</section>
-
-<nav id="filters">
-<button class="active" onclick="filter('All',this)">All</button>
-<button onclick="filter('Seeds',this)">Seeds</button>
-<button onclick="filter('Cars',this)">Cars</button>
-<button onclick="filter('Tractors',this)">Tractors</button>
-<button onclick="filter('Trucks',this)">Trucks</button>
-<button onclick="filter('Equipments',this)">Equipments</button>
-<button onclick="filter('Events',this)">Events</button>
-</nav>
-
-<h2 id="heading">All Items</h2>
-<div class="grid" id="items"></div>
-<div id="loadStatus" class="status">Loading items...</div>
-
+  <section>
+    <h2>Wiki Items</h2>
+    <div class="filters" id="filters"></div>
+    <div id="items" class="grid"></div>
+    <p id="emptyMessage" class="muted hidden">No items found in this category yet.</p>
+  </section>
 </main>
 
-<footer>FAF Marketplace & Values • Community Wiki</footer>
+<footer>FAF Marketplace & Values Wiki</footer>
 
 <script>
+  const SUPABASE_URL = "https://hhlfsbfyzqgmupzvwkfw.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_kZmcyKVx-lMt7QVFXqakmw_w5hCVvXv";
 
-// SUPABASE CONNECTION
-const SUPABASE_URL = "https://hhlfsbfyzqgmupzvwkfw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_kZmcyKVx-lMt7QVFXqakmw_w5hCVvXv";
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const categories = [
+    "All",
+    "Seeds",
+    "Cars",
+    "Tractors",
+    "Trucks",
+    "Harvesters",
+    "Equipments",
+    "Events",
+    "Developer Items"
+  ];
 
-let selected = "All";
-let items = [];
-let isAdmin = false;
-let editingId = null;
+  let currentCategory = "All";
+  let currentUser = null;
+  let isAdmin = false;
+  let editingId = null;
+  let items = [];
 
-// HTML SECURITY
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
-}
+  const el = id => document.getElementById(id);
 
-function setStatus(id,message) {
-  document.getElementById(id).textContent = message || "";
-}
-
-// FILTER
-function filter(category,button) {
-  selected = category;
-  document.querySelectorAll("#filters button").forEach(b => b.classList.remove("active"));
-  button.classList.add("active");
-  render();
-}
-
-// DISPLAY ITEMS
-function render() {
-  const q = document.getElementById("search").value.trim().toLowerCase();
-
-  const list = items.filter(x =>
-    (selected === "All" || x.category === selected) &&
-    (x.name + " " + x.category + " " + (x.description || "")).toLowerCase().includes(q)
-  );
-
-  document.getElementById("heading").textContent =
-    selected === "All" ? "All Items" : selected;
-
-  const container = document.getElementById("items");
-
-  if (!list.length) {
-    container.innerHTML = '<p class="muted">No items found.</p>';
-    return;
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
   }
 
-  container.innerHTML = list.map(x => `
-    <article class="card">
-      <div class="photo">
-        ${x.image_url
-          ? `<img src="${escapeHTML(x.image_url)}" alt="${escapeHTML(x.name)}" loading="lazy">`
-          : "Item image"}
-      </div>
-      <div class="info">
-        <div class="category">${escapeHTML(x.category)}</div>
-        <h3>${escapeHTML(x.name)}</h3>
-        <div class="description">${escapeHTML(x.description || "")}</div>
-        ${isAdmin ? `
-          <div class="item-actions">
-            <button onclick="startEdit('${x.id}')">Edit</button>
-            <button onclick="deleteItem('${x.id}')">Delete</button>
-          </div>
-        ` : ""}
-      </div>
-    </article>
-  `).join("");
-}
-
-// LOAD ITEMS
-async function loadItems() {
-  setStatus("loadStatus","Loading items...");
-
-  const {data,error} = await db
-    .from("items")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if(error) {
-    setStatus("loadStatus","Could not load items: " + error.message);
-    return;
+  function showMessage(message, isError = false) {
+    el("message").textContent = message;
+    el("message").style.color = isError ? "#ff9999" : "#b8e89b";
   }
 
-  items = data || [];
-  setStatus("loadStatus","");
-  render();
-}
-
-// LOGIN PANEL
-function toggleLogin() {
-  document.getElementById("loginPanel").classList.toggle("hidden");
-}
-
-function closeLogin() {
-  document.getElementById("loginPanel").classList.add("hidden");
-  setStatus("loginStatus","");
-}
-
-// ADMIN LOGIN
-async function login() {
-  const button = document.getElementById("loginButton");
-  button.disabled = true;
-  setStatus("loginStatus","Signing in...");
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  const {error} = await db.auth.signInWithPassword({email,password});
-
-  button.disabled = false;
-
-  if(error) {
-    setStatus("loginStatus","Login failed: " + error.message);
-    return;
+  function showLoginMessage(message) {
+    el("loginMessage").textContent = message;
   }
 
-  document.getElementById("password").value = "";
-  closeLogin();
-  await checkAdmin();
-}
+  function renderFilters() {
+    el("filters").innerHTML = categories.map(category => `
+      <button
+        class="${currentCategory === category ? "active" : ""}"
+        data-category="${escapeHTML(category)}">
+        ${escapeHTML(category)}
+      </button>
+    `).join("");
 
-// CHECK ADMIN RIGHTS
-async function checkAdmin() {
-  const {data:{user}} = await db.auth.getUser();
+    el("filters").querySelectorAll("button").forEach(button => {
+      button.addEventListener("click", () => {
+        currentCategory = button.dataset.category;
+        renderFilters();
+        renderItems();
+      });
+    });
+  }
 
-  if(!user) {
+  async function loadItems() {
+    const { data, error } = await db
+      .from("items")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      el("items").textContent = "Could not load items: " + error.message;
+      return;
+    }
+
+    items = data || [];
+    renderItems();
+  }
+
+  function renderItems() {
+    const filtered = currentCategory === "All"
+      ? items
+      : items.filter(item => item.category === currentCategory);
+
+    el("emptyMessage").classList.toggle("hidden", filtered.length !== 0);
+
+    el("items").innerHTML = filtered.map(item => `
+      <article class="item">
+        ${item.image_url
+          ? `<img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}">`
+          : `<div style="height:165px;background:#263528;display:grid;place-items:center;color:#aab9a6">No image</div>`
+        }
+        <div class="item-content">
+          <span class="category">${escapeHTML(item.category)}</span>
+          <h3>${escapeHTML(item.name)}</h3>
+          <p class="description">${escapeHTML(item.description || "")}</p>
+          ${isAdmin ? `
+            <div class="admin-actions">
+              <button class="editBtn" data-id="${escapeHTML(item.id)}">Edit</button>
+              <button class="danger deleteBtn" data-id="${escapeHTML(item.id)}">Delete</button>
+            </div>
+          ` : ""}
+        </div>
+      </article>
+    `).join("");
+
+    if (isAdmin) {
+      el("items").querySelectorAll(".editBtn").forEach(button => {
+        button.addEventListener("click", () => startEdit(button.dataset.id));
+      });
+
+      el("items").querySelectorAll(".deleteBtn").forEach(button => {
+        button.addEventListener("click", () => deleteItem(button.dataset.id));
+      });
+    }
+  }
+
+  async function checkAdmin() {
+    const { data: { user } } = await db.auth.getUser();
+    currentUser = user;
     isAdmin = false;
-    document.getElementById("adminPanel").classList.add("hidden");
-    document.getElementById("loginToggle").classList.remove("hidden");
-    render();
-    return;
+
+    if (user) {
+      const { data, error } = await db.rpc("is_admin");
+      if (!error) isAdmin = data === true;
+    }
+
+    el("loginPanel").classList.toggle("hidden", isAdmin);
+    el("adminPanel").classList.toggle("hidden", !isAdmin);
+
+    renderItems();
   }
 
-  const {data,error} = await db.rpc("is_admin");
+  async function login() {
+    const email = el("email").value.trim();
+    const password = el("password").value;
 
-  if(error || data !== true) {
-    isAdmin = false;
-    document.getElementById("adminPanel").classList.add("hidden");
-    document.getElementById("loginToggle").classList.remove("hidden");
-    setStatus("loginStatus","This account does not have admin access.");
+    showLoginMessage("Logging in...");
+
+    const { error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      showLoginMessage(error.message);
+      return;
+    }
+
+    await checkAdmin();
+
+    if (!isAdmin) {
+      showLoginMessage("This account is not an authorized admin.");
+      await db.auth.signOut();
+      await checkAdmin();
+    } else {
+      showLoginMessage("");
+      showMessage("Logged in successfully!");
+    }
+  }
+
+  async function logout() {
     await db.auth.signOut();
-    render();
-    return;
-  }
-
-  isAdmin = true;
-  document.getElementById("adminPanel").classList.remove("hidden");
-  document.getElementById("loginToggle").classList.add("hidden");
-  document.getElementById("adminEmail").textContent = user.email || "Administrator";
-  render();
-}
-
-// LOGOUT
-async function logout() {
-  await db.auth.signOut();
-  isAdmin = false;
-  editingId = null;
-  document.getElementById("adminPanel").classList.add("hidden");
-  document.getElementById("loginToggle").classList.remove("hidden");
-  render();
-}
-
-// RESET FORM
-function resetForm() {
-  editingId = null;
-  document.getElementById("itemForm").reset();
-  document.getElementById("formTitle").textContent = "Add new item";
-  document.getElementById("saveButton").textContent = "Add item";
-  document.getElementById("imageHint").textContent = "Choose an image to upload.";
-  setStatus("adminStatus","");
-}
-
-// EDIT ITEM
-function startEdit(id) {
-  const item = items.find(x => x.id === id);
-  if(!item) return;
-
-  editingId = id;
-  document.getElementById("itemName").value = item.name;
-  document.getElementById("itemCategory").value = item.category;
-  document.getElementById("itemDescription").value = item.description || "";
-  document.getElementById("itemImage").value = "";
-
-  document.getElementById("formTitle").textContent = "Edit item";
-  document.getElementById("saveButton").textContent = "Save changes";
-
-  document.getElementById("imageHint").textContent = item.image_url
-    ? "Leave image empty to keep the current image, or choose a new one."
-    : "Choose an image to upload.";
-
-  setStatus("adminStatus","Editing: " + item.name);
-  document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
-}
-
-// UPLOAD IMAGE
-async function uploadImage(file) {
-  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g,"-");
-  const path = crypto.randomUUID() + "-" + safeName;
-
-  const {error} = await db.storage
-    .from("item-images")
-    .upload(path,file,{upsert:false});
-
-  if(error) throw error;
-
-  const {data} = db.storage
-    .from("item-images")
-    .getPublicUrl(path);
-
-  return data.publicUrl;
-}
-
-// ADD OR UPDATE ITEM
-async function saveItem(event) {
-  event.preventDefault();
-  if(!isAdmin) return;
-
-  const button = document.getElementById("saveButton");
-  button.disabled = true;
-  setStatus("adminStatus","Saving...");
-
-  try {
-    const name = document.getElementById("itemName").value.trim();
-    const category = document.getElementById("itemCategory").value;
-    const description = document.getElementById("itemDescription").value.trim();
-    const file = document.getElementById("itemImage").files[0];
-
-    let image_url = editingId
-      ? (items.find(x => x.id === editingId)?.image_url || "")
-      : "";
-
-    if(file) image_url = await uploadImage(file);
-
-    const record = {name,category,description,image_url};
-
-    const result = editingId
-      ? await db.from("items").update(record).eq("id",editingId)
-      : await db.from("items").insert(record);
-
-    if(result.error) throw result.error;
-
     resetForm();
+    await checkAdmin();
+    showLoginMessage("Logged out.");
+  }
+
+  function resetForm() {
+    editingId = null;
+    el("itemName").value = "";
+    el("itemCategory").value = "Seeds";
+    el("itemDescription").value = "";
+    el("itemImage").value = "";
+    el("formTitle").textContent = "Add New Item";
+    el("saveBtn").textContent = "Add Item";
+    el("cancelEditBtn").classList.add("hidden");
+    showMessage("");
+  }
+
+  function startEdit(id) {
+    const item = items.find(entry => entry.id === id);
+    if (!item) return;
+
+    editingId = id;
+    el("itemName").value = item.name || "";
+    el("itemCategory").value = item.category || "Seeds";
+    el("itemDescription").value = item.description || "";
+    el("itemImage").value = "";
+    el("formTitle").textContent = "Edit Item";
+    el("saveBtn").textContent = "Save Changes";
+    el("cancelEditBtn").classList.remove("hidden");
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function saveItem() {
+    if (!isAdmin) return;
+
+    const name = el("itemName").value.trim();
+    const category = el("itemCategory").value;
+    const description = el("itemDescription").value.trim();
+    const file = el("itemImage").files[0];
+
+    if (!name) {
+      showMessage("Please enter an item name.", true);
+      return;
+    }
+
+    el("saveBtn").disabled = true;
+    showMessage("Saving...");
+
+    try {
+      let imageUrl = null;
+
+      if (editingId) {
+        const existing = items.find(item => item.id === editingId);
+        imageUrl = existing?.image_url || null;
+      }
+
+      if (file) {
+        const extension = file.name.split(".").pop().toLowerCase();
+        const filePath = `${crypto.randomUUID()}.${extension}`;
+
+        const { error: uploadError } = await db.storage
+          .from("item-images")
+          .upload(filePath, file, { upsert: false });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicData } = db.storage
+          .from("item-images")
+          .getPublicUrl(filePath);
+
+        imageUrl = publicData.publicUrl;
+      }
+
+      const itemData = {
+        name,
+        category,
+        description,
+        image_url: imageUrl
+      };
+
+      let result;
+
+      if (editingId) {
+        result = await db.from("items").update(itemData).eq("id", editingId);
+      } else {
+        result = await db.from("items").insert(itemData);
+      }
+
+      if (result.error) throw result.error;
+
+      showMessage(editingId ? "Item updated!" : "Item added!");
+      resetForm();
+      await loadItems();
+
+    } catch (error) {
+      showMessage(error.message || "Something went wrong.", true);
+    } finally {
+      el("saveBtn").disabled = false;
+    }
+  }
+
+  async function deleteItem(id) {
+    if (!isAdmin) return;
+    if (!confirm("Are you sure you want to delete this item?")) return;
+
+    const { error } = await db.from("items").delete().eq("id", id);
+
+    if (error) {
+      showMessage(error.message, true);
+      return;
+    }
+
+    showMessage("Item deleted.");
     await loadItems();
-    setStatus("adminStatus","Item saved successfully.");
-
-  } catch(error) {
-    setStatus("adminStatus","Error: " + error.message);
-  } finally {
-    button.disabled = false;
-  }
-}
-
-// DELETE ITEM
-async function deleteItem(id) {
-  if(!isAdmin || !confirm("Delete this item?")) return;
-
-  const {error} = await db.from("items").delete().eq("id",id);
-
-  if(error) {
-    alert("Could not delete item: " + error.message);
-    return;
   }
 
-  if(editingId === id) resetForm();
-  await loadItems();
-}
+  el("loginBtn").addEventListener("click", login);
+  el("logoutBtn").addEventListener("click", logout);
+  el("saveBtn").addEventListener("click", saveItem);
+  el("cancelEditBtn").addEventListener("click", resetForm);
 
-// AUTH STATE
-db.auth.onAuthStateChange(() => {
-  setTimeout(() => checkAdmin(),0);
-});
+  db.auth.onAuthStateChange(() => {
+    setTimeout(() => checkAdmin(), 0);
+  });
 
-// START
-(async function init() {
-  await loadItems();
-  await checkAdmin();
-})();
-
+  renderFilters();
+  loadItems();
+  checkAdmin();
 </script>
 </body>
 </html>
