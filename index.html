@@ -8,12 +8,14 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #101810;
       color: #edf5e9;
     }
+
     header {
       background: #1b2b1d;
       padding: 25px 18px;
@@ -21,6 +23,7 @@
       border-bottom: 2px solid #466b3d;
       position: relative;
     }
+
     header h1 { margin: 0 0 8px; color: #a8dc83; }
     header p { margin: 0; color: #c4d5bd; }
 
@@ -39,10 +42,12 @@
       font-weight: bold;
       transition: background .2s;
     }
+
     .discord-link:hover { background: #4752c4; }
     .discord-link svg { width: 22px; height: 22px; fill: white; }
 
     main { max-width: 1100px; margin: auto; padding: 20px; }
+
     .panel {
       background: #1b291d;
       border: 1px solid #38543a;
@@ -50,7 +55,9 @@
       padding: 18px;
       margin-bottom: 22px;
     }
+
     h2 { color: #a8dc83; margin-top: 0; }
+
     input, select, textarea, button {
       width: 100%;
       padding: 11px;
@@ -61,47 +68,94 @@
       color: white;
       font: inherit;
     }
+
     textarea { min-height: 90px; resize: vertical; }
+
     button {
       background: #477b3c;
       border: 0;
       font-weight: bold;
       cursor: pointer;
     }
+
     button:hover { background: #5b954c; }
     button.secondary { background: #405344; }
     button.danger { background: #963f3f; }
+
     .filters {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 18px;
     }
+
     .filters button {
       width: auto;
       padding: 9px 13px;
       margin: 0;
     }
-    .filters button.active { background: #8bbf68; color: #10200e; }
+
+    .filters button.active {
+      background: #8bbf68;
+      color: #10200e;
+    }
+
+    .search-box {
+      margin-bottom: 16px;
+    }
+
+    .search-box input {
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #52734b;
+      background: #1b291d;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 16px;
     }
+
     .item {
       background: #1b291d;
       border: 1px solid #38543a;
       border-radius: 11px;
       overflow: hidden;
+      transition: transform .2s, border-color .2s;
     }
-    .item img {
+
+    .item:hover {
+      transform: translateY(-3px);
+      border-color: #8bbf68;
+    }
+
+    .item-image {
       width: 100%;
       height: 165px;
       object-fit: cover;
       background: #263528;
+      cursor: pointer;
+      display: block;
     }
+
+    .no-image {
+      height: 165px;
+      background: #263528;
+      display: grid;
+      place-items: center;
+      color: #aab9a6;
+      cursor: pointer;
+    }
+
     .item-content { padding: 13px; }
-    .item h3 { margin: 0 0 8px; color: #b6e393; }
+
+    .item h3 {
+      margin: 0 0 8px;
+      color: #b6e393;
+      cursor: pointer;
+    }
+
     .category {
       display: inline-block;
       background: #304a30;
@@ -111,20 +165,132 @@
       font-size: 12px;
       margin-bottom: 8px;
     }
-    .description { color: #d0d9cd; white-space: pre-wrap; }
-    .admin-actions { display: flex; gap: 7px; }
+
+    .description {
+      color: #d0d9cd;
+      white-space: pre-wrap;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 7px;
+    }
+
     .admin-actions button { flex: 1; }
+
     .hidden { display: none !important; }
     .muted { color: #aab9a6; font-size: 13px; }
-    #message, #loginMessage { margin: 10px 0; color: #b8e89b; }
-    footer { text-align: center; padding: 25px; color: #81917e; }
+
+    #message, #loginMessage {
+      margin: 10px 0;
+      color: #b8e89b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #81917e;
+    }
+
+    /* Item detail popup */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      background: #1b291d;
+      border: 1px solid #52734b;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, .6);
+      animation: popup .2s ease-out;
+      margin: auto;
+    }
+
+    @keyframes popup {
+      from { opacity: 0; transform: scale(.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 15px 55px 15px 18px;
+      border-bottom: 1px solid #38543a;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      margin: 0;
+      border-radius: 50%;
+      background: #405344;
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .modal-image {
+      width: 100%;
+      max-height: 430px;
+      object-fit: contain;
+      display: block;
+      background: #111810;
+    }
+
+    .modal-no-image {
+      height: 230px;
+      display: grid;
+      place-items: center;
+      color: #aab9a6;
+      background: #111810;
+    }
+
+    .modal-content {
+      padding: 18px;
+    }
+
+    .modal-content .description {
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    body.modal-open { overflow: hidden; }
 
     @media (max-width: 650px) {
       header { padding: 75px 15px 22px; }
-      .discord-link { top: 13px; right: 50%; transform: translateX(50%); }
+
+      .discord-link {
+        top: 13px;
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      .modal-overlay { padding: 12px; }
+
+      .modal-image { max-height: 55vh; }
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -182,11 +348,36 @@
 
   <section>
     <h2>Wiki Items</h2>
+
+    <div class="search-box">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="🔍 Search items by name, description or category..."
+        aria-label="Search items">
+    </div>
+
     <div class="filters" id="filters"></div>
     <div id="items" class="grid"></div>
-    <p id="emptyMessage" class="muted hidden">No items found in this category yet.</p>
+    <p id="emptyMessage" class="muted hidden">No items found. Try another search or category.</p>
   </section>
 </main>
+
+<!-- Item popup -->
+<div id="itemModal" class="modal-overlay hidden" role="dialog"
+     aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    </div>
+    <div id="modalImageContainer"></div>
+    <div class="modal-content">
+      <span class="category" id="modalCategory"></span>
+      <p class="description" id="modalDescription"></p>
+    </div>
+  </div>
+</div>
 
 <footer>FAF Marketplace & Values Wiki</footer>
 
@@ -260,22 +451,42 @@
   }
 
   function renderItems() {
-    const filtered = currentCategory === "All"
-      ? items
-      : items.filter(item => item.category === currentCategory);
+    const searchTerm = el("searchInput").value.trim().toLowerCase();
+
+    const filtered = items.filter(item => {
+      const matchesCategory =
+        currentCategory === "All" || item.category === currentCategory;
+
+      const searchableText = [
+        item.name,
+        item.description,
+        item.category
+      ].join(" ").toLowerCase();
+
+      const matchesSearch = searchableText.includes(searchTerm);
+
+      return matchesCategory && matchesSearch;
+    });
 
     el("emptyMessage").classList.toggle("hidden", filtered.length !== 0);
 
     el("items").innerHTML = filtered.map(item => `
       <article class="item">
         ${item.image_url
-          ? `<img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}">`
-          : `<div style="height:165px;background:#263528;display:grid;place-items:center;color:#aab9a6">No image</div>`
+          ? `<img class="item-image item-open"
+                  src="${escapeHTML(item.image_url)}"
+                  alt="${escapeHTML(item.name)}"
+                  data-id="${escapeHTML(item.id)}">`
+          : `<div class="no-image item-open" data-id="${escapeHTML(item.id)}">No image</div>`
         }
+
         <div class="item-content">
           <span class="category">${escapeHTML(item.category)}</span>
-          <h3>${escapeHTML(item.name)}</h3>
+          <h3 class="item-open" data-id="${escapeHTML(item.id)}">
+            ${escapeHTML(item.name)}
+          </h3>
           <p class="description">${escapeHTML(item.description || "")}</p>
+
           ${isAdmin ? `
             <div class="admin-actions">
               <button class="editBtn" data-id="${escapeHTML(item.id)}">Edit</button>
@@ -285,6 +496,12 @@
         </div>
       </article>
     `).join("");
+
+    el("items").querySelectorAll(".item-open").forEach(element => {
+      element.addEventListener("click", () => {
+        openItem(element.dataset.id);
+      });
+    });
 
     if (isAdmin) {
       el("items").querySelectorAll(".editBtn").forEach(button => {
@@ -297,19 +514,67 @@
     }
   }
 
+  function openItem(id) {
+    const item = items.find(entry => entry.id === id);
+    if (!item) return;
+
+    el("modalTitle").textContent = item.name || "Unnamed item";
+    el("modalCategory").textContent = item.category || "";
+    el("modalDescription").textContent = item.description || "No description available.";
+
+    if (item.image_url) {
+      const image = document.createElement("img");
+      image.className = "modal-image";
+      image.src = item.image_url;
+      image.alt = item.name || "Item image";
+      el("modalImageContainer").replaceChildren(image);
+    } else {
+      const placeholder = document.createElement("div");
+      placeholder.className = "modal-no-image";
+      placeholder.textContent = "No image available";
+      el("modalImageContainer").replaceChildren(placeholder);
+    }
+
+    el("itemModal").classList.remove("hidden");
+    document.body.classList.add("modal-open");
+    el("modalClose").focus();
+  }
+
+  function closeItem() {
+    el("itemModal").classList.add("hidden");
+    document.body.classList.remove("modal-open");
+  }
+
+  el("modalClose").addEventListener("click", closeItem);
+
+  el("itemModal").addEventListener("click", event => {
+    if (event.target === el("itemModal")) closeItem();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !el("itemModal").classList.contains("hidden")) {
+      closeItem();
+    }
+  });
+
   async function checkAdmin() {
-    const { data: { user } } = await db.auth.getUser();
+    // Sakrij admin sekcije dok se proverava nalog.
+    el("loginPanel").classList.add("hidden");
+    el("adminPanel").classList.add("hidden");
     isAdmin = false;
+
+    const { data: { user } } = await db.auth.getUser();
+
+    let authorizedAdmin = false;
 
     if (user) {
       const { data, error } = await db.rpc("is_admin");
-      if (!error) isAdmin = data === true;
+      authorizedAdmin = !error && data === true;
     }
 
-    // Login se prikazuje samo na admin linku, ako korisnik nije prijavljen.
-    el("loginPanel").classList.toggle("hidden", !adminMode || isAdmin);
+    isAdmin = adminMode && authorizedAdmin;
 
-    // Admin panel se prikazuje samo prijavljenim administratorima.
+    el("loginPanel").classList.toggle("hidden", !adminMode || isAdmin);
     el("adminPanel").classList.toggle("hidden", !isAdmin);
 
     renderItems();
@@ -331,7 +596,8 @@
     await checkAdmin();
 
     if (!isAdmin) {
-      el("loginMessage").textContent = "This account is not an authorized admin.";
+      el("loginMessage").textContent =
+        "This account is not an authorized admin.";
       await db.auth.signOut();
       await checkAdmin();
     } else {
@@ -450,6 +716,7 @@
     await loadItems();
   }
 
+  el("searchInput").addEventListener("input", renderItems);
   el("loginBtn").addEventListener("click", login);
   el("logoutBtn").addEventListener("click", logout);
   el("saveBtn").addEventListener("click", saveItem);
@@ -463,5 +730,6 @@
   loadItems();
   checkAdmin();
 </script>
+
 </body>
 </html>
