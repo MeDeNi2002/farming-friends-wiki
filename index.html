@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAF Marketplace & Values | Wiki</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0d1512;color:#f2f7f3;font-family:Arial,sans-serif}
@@ -43,6 +44,7 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 @media(max-width:600px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -54,7 +56,7 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 <main>
 
 <div class="toolbar">
-<input id="search" placeholder="Search seeds, cars, equipments..." style="max-width:650px" oninput="render()">
+<input id="search" placeholder="Search seeds, cars, tractors, trucks..." style="max-width:650px" oninput="render()">
 <button id="loginToggle" onclick="toggleLogin()">Admin login</button>
 </div>
 
@@ -84,11 +86,14 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 
 <form id="itemForm" onsubmit="saveItem(event)">
 <div class="form-grid">
+
 <input id="itemName" required maxlength="100" placeholder="Item name">
 
 <select id="itemCategory" required>
 <option value="Seeds">Seeds</option>
 <option value="Cars">Cars</option>
+<option value="Tractors">Tractors</option>
+<option value="Trucks">Trucks</option>
 <option value="Equipments">Equipments</option>
 <option value="Events">Events</option>
 </select>
@@ -100,6 +105,7 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 <input id="itemImage" type="file" accept="image/*">
 <div class="muted" id="imageHint">Choose an image to upload.</div>
 </div>
+
 </div>
 
 <div class="form-actions">
@@ -114,6 +120,8 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 <button class="active" onclick="filter('All',this)">All</button>
 <button onclick="filter('Seeds',this)">Seeds</button>
 <button onclick="filter('Cars',this)">Cars</button>
+<button onclick="filter('Tractors',this)">Tractors</button>
+<button onclick="filter('Trucks',this)">Trucks</button>
 <button onclick="filter('Equipments',this)">Equipments</button>
 <button onclick="filter('Events',this)">Events</button>
 </nav>
@@ -127,6 +135,7 @@ footer{text-align:center;padding:30px;color:#879b8b;border-top:1px solid #294233
 <footer>FAF Marketplace & Values • Community Wiki</footer>
 
 <script>
+
 // SUPABASE CONNECTION
 const SUPABASE_URL = "https://hhlfsbfyzqgmupzvwkfw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_kZmcyKVx-lMt7QVFXqakmw_w5hCVvXv";
@@ -138,6 +147,7 @@ let items = [];
 let isAdmin = false;
 let editingId = null;
 
+// HTML SECURITY
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;",
@@ -148,12 +158,12 @@ function escapeHTML(value) {
   }[c]));
 }
 
-function setStatus(id, message) {
+function setStatus(id,message) {
   document.getElementById(id).textContent = message || "";
 }
 
-// CATEGORY FILTER
-function filter(category, button) {
+// FILTER
+function filter(category,button) {
   selected = category;
   document.querySelectorAll("#filters button").forEach(b => b.classList.remove("active"));
   button.classList.add("active");
@@ -190,7 +200,6 @@ function render() {
         <div class="category">${escapeHTML(x.category)}</div>
         <h3>${escapeHTML(x.name)}</h3>
         <div class="description">${escapeHTML(x.description || "")}</div>
-
         ${isAdmin ? `
           <div class="item-actions">
             <button onclick="startEdit('${x.id}')">Edit</button>
@@ -202,22 +211,22 @@ function render() {
   `).join("");
 }
 
-// LOAD ITEMS FROM DATABASE
+// LOAD ITEMS
 async function loadItems() {
-  setStatus("loadStatus", "Loading items...");
+  setStatus("loadStatus","Loading items...");
 
-  const { data, error } = await db
+  const {data,error} = await db
     .from("items")
     .select("*")
-    .order("created_at", { ascending:false });
+    .order("created_at",{ascending:false});
 
-  if (error) {
-    setStatus("loadStatus", "Could not load items: " + error.message);
+  if(error) {
+    setStatus("loadStatus","Could not load items: " + error.message);
     return;
   }
 
   items = data || [];
-  setStatus("loadStatus", "");
+  setStatus("loadStatus","");
   render();
 }
 
@@ -228,24 +237,24 @@ function toggleLogin() {
 
 function closeLogin() {
   document.getElementById("loginPanel").classList.add("hidden");
-  setStatus("loginStatus", "");
+  setStatus("loginStatus","");
 }
 
 // ADMIN LOGIN
 async function login() {
   const button = document.getElementById("loginButton");
   button.disabled = true;
-  setStatus("loginStatus", "Signing in...");
+  setStatus("loginStatus","Signing in...");
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  const { error } = await db.auth.signInWithPassword({ email, password });
+  const {error} = await db.auth.signInWithPassword({email,password});
 
   button.disabled = false;
 
-  if (error) {
-    setStatus("loginStatus", "Login failed: " + error.message);
+  if(error) {
+    setStatus("loginStatus","Login failed: " + error.message);
     return;
   }
 
@@ -256,9 +265,9 @@ async function login() {
 
 // CHECK ADMIN RIGHTS
 async function checkAdmin() {
-  const { data: { user } } = await db.auth.getUser();
+  const {data:{user}} = await db.auth.getUser();
 
-  if (!user) {
+  if(!user) {
     isAdmin = false;
     document.getElementById("adminPanel").classList.add("hidden");
     document.getElementById("loginToggle").classList.remove("hidden");
@@ -266,13 +275,13 @@ async function checkAdmin() {
     return;
   }
 
-  const { data, error } = await db.rpc("is_admin");
+  const {data,error} = await db.rpc("is_admin");
 
-  if (error || data !== true) {
+  if(error || data !== true) {
     isAdmin = false;
     document.getElementById("adminPanel").classList.add("hidden");
     document.getElementById("loginToggle").classList.remove("hidden");
-    setStatus("loginStatus", "This account does not have admin access.");
+    setStatus("loginStatus","This account does not have admin access.");
     await db.auth.signOut();
     render();
     return;
@@ -295,20 +304,20 @@ async function logout() {
   render();
 }
 
-// RESET ITEM FORM
+// RESET FORM
 function resetForm() {
   editingId = null;
   document.getElementById("itemForm").reset();
   document.getElementById("formTitle").textContent = "Add new item";
   document.getElementById("saveButton").textContent = "Add item";
   document.getElementById("imageHint").textContent = "Choose an image to upload.";
-  setStatus("adminStatus", "");
+  setStatus("adminStatus","");
 }
 
 // EDIT ITEM
 function startEdit(id) {
   const item = items.find(x => x.id === id);
-  if (!item) return;
+  if(!item) return;
 
   editingId = id;
   document.getElementById("itemName").value = item.name;
@@ -323,22 +332,22 @@ function startEdit(id) {
     ? "Leave image empty to keep the current image, or choose a new one."
     : "Choose an image to upload.";
 
-  setStatus("adminStatus", "Editing: " + item.name);
-  document.getElementById("adminPanel").scrollIntoView({ behavior:"smooth" });
+  setStatus("adminStatus","Editing: " + item.name);
+  document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
 }
 
 // UPLOAD IMAGE
 async function uploadImage(file) {
-  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g, "-");
+  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g,"-");
   const path = crypto.randomUUID() + "-" + safeName;
 
-  const { error } = await db.storage
+  const {error} = await db.storage
     .from("item-images")
-    .upload(path, file, { upsert:false });
+    .upload(path,file,{upsert:false});
 
-  if (error) throw error;
+  if(error) throw error;
 
-  const { data } = db.storage
+  const {data} = db.storage
     .from("item-images")
     .getPublicUrl(path);
 
@@ -348,11 +357,11 @@ async function uploadImage(file) {
 // ADD OR UPDATE ITEM
 async function saveItem(event) {
   event.preventDefault();
-  if (!isAdmin) return;
+  if(!isAdmin) return;
 
   const button = document.getElementById("saveButton");
   button.disabled = true;
-  setStatus("adminStatus", "Saving...");
+  setStatus("adminStatus","Saving...");
 
   try {
     const name = document.getElementById("itemName").value.trim();
@@ -364,22 +373,22 @@ async function saveItem(event) {
       ? (items.find(x => x.id === editingId)?.image_url || "")
       : "";
 
-    if (file) image_url = await uploadImage(file);
+    if(file) image_url = await uploadImage(file);
 
-    const record = { name, category, description, image_url };
+    const record = {name,category,description,image_url};
 
     const result = editingId
-      ? await db.from("items").update(record).eq("id", editingId)
+      ? await db.from("items").update(record).eq("id",editingId)
       : await db.from("items").insert(record);
 
-    if (result.error) throw result.error;
+    if(result.error) throw result.error;
 
     resetForm();
     await loadItems();
-    setStatus("adminStatus", "Item saved successfully.");
+    setStatus("adminStatus","Item saved successfully.");
 
-  } catch (error) {
-    setStatus("adminStatus", "Error: " + error.message);
+  } catch(error) {
+    setStatus("adminStatus","Error: " + error.message);
   } finally {
     button.disabled = false;
   }
@@ -387,22 +396,22 @@ async function saveItem(event) {
 
 // DELETE ITEM
 async function deleteItem(id) {
-  if (!isAdmin || !confirm("Delete this item?")) return;
+  if(!isAdmin || !confirm("Delete this item?")) return;
 
-  const { error } = await db.from("items").delete().eq("id", id);
+  const {error} = await db.from("items").delete().eq("id",id);
 
-  if (error) {
+  if(error) {
     alert("Could not delete item: " + error.message);
     return;
   }
 
-  if (editingId === id) resetForm();
+  if(editingId === id) resetForm();
   await loadItems();
 }
 
 // AUTH STATE
 db.auth.onAuthStateChange(() => {
-  setTimeout(() => checkAdmin(), 0);
+  setTimeout(() => checkAdmin(),0);
 });
 
 // START
@@ -410,7 +419,7 @@ db.auth.onAuthStateChange(() => {
   await loadItems();
   await checkAdmin();
 })();
-</script>
 
+</script>
 </body>
 </html>
